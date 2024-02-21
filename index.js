@@ -95,7 +95,7 @@ const buy = async (client) => {
     console.log(getCurrentTimeTrade(), `Buy ${(userbalance.USDC.available - 2).toFixed(2).toString()} $USDC to ${quantitys} $SOL`);
     let orderResultBid = await client.ExecuteOrder({
         orderType: "Limit",
-        price: (lastPrice + 0.2).toFixed(2).toString(),
+        price: (lastPrice + 0.05).toFixed(2).toString(),
         quantity: quantitys,
         side: "Bid",
         symbol: "SOL_USDC",
@@ -131,7 +131,7 @@ const sell = async (client) => {
     console.log(getCurrentTimeTrade(), `Sell ${quantitys} $SOL to ${(lastPrice * quantitys).toFixed(2)} $USDC`);
     let orderResultAsk = await client.ExecuteOrder({
         orderType: "Limit",
-        price: (lastPrice - 0.2).toFixed(2).toString(),
+        price: (lastPrice - 0.05).toFixed(2).toString(),
         quantity: quantitys,
         side: "Ask",
         symbol: "SOL_USDC",
