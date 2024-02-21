@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const backpack_client_1 = require("./backpack_client");
 
 /// EDIT HERE ///
-const API_KEY = "q/5vO4PtmD1VG+YCXIFwbkSk4l/ZAfSrgVxqbU6wXfM=";
-const API_SECRET = "YmQuuQcIUVPkH+F7vipHxFsbMmeZFtqa1sb78vjLNnU=";
+const API_KEY = "b0KPCPT0i0z63NB2zB137ESZDA7GPKfNq73y5hj8nGc=";
+const API_SECRET = "ykBr9pQNLiM8018c6C80vkPmuO+uGuxBzB4BsjljzSE=";
 /////////////
 
 function delay(ms) {
@@ -54,7 +54,7 @@ const getRandomIntInclusive = (min, max) => {
 }
 
 const init = async (client) => {
-    const numberRandom = getRandomIntInclusive(5000, 10000);
+    const numberRandom = getRandomIntInclusive(5000, 7000);
     try {
         console.log("\n============================")
         console.log(`Total Buy: ${successbuy} | Total Sell: ${sellbuy}`);
@@ -95,7 +95,7 @@ const buy = async (client) => {
     console.log(getCurrentTimeTrade(), `Buy ${(userbalance.USDC.available - 2).toFixed(2).toString()} $USDC to ${quantitys} $SOL`);
     let orderResultBid = await client.ExecuteOrder({
         orderType: "Limit",
-        price: lastPrice.toString(),
+        price: (lastPrice + 0.2).toFixed(2).toString(),
         quantity: quantitys,
         side: "Bid",
         symbol: "SOL_USDC",
@@ -125,13 +125,13 @@ const sell = async (client) => {
     let userbalance2 = await client.Balance();
     console.log(getCurrentTimeTrade(), `My Account Infos: ${userbalance2.SOL.available} $SOL | ${userbalance2.USDC.available} $USDC`, );
     
-    let { lastPrice: lastPriceask } = await client.Ticker({ symbol: "SOL_USDC" });
-    console.log(getCurrentTimeTrade(), "Price sol_usdc:", lastPriceask);
-    let quantitys = ((userbalance2.SOL.available / 2) - 0.02).toFixed(2).toString();
-    console.log(getCurrentTimeTrade(), `Sell ${quantitys} $SOL to ${(lastPriceask * quantitys).toFixed(2)} $USDC`);
+    let { lastPrice } = await client.Ticker({ symbol: "SOL_USDC" });
+    console.log(getCurrentTimeTrade(), "Price sol_usdc:", lastPrice);
+    let quantitys = (userbalance2.SOL.available - 0.02).toFixed(2).toString();
+    console.log(getCurrentTimeTrade(), `Sell ${quantitys} $SOL to ${(lastPrice * quantitys).toFixed(2)} $USDC`);
     let orderResultAsk = await client.ExecuteOrder({
         orderType: "Limit",
-        price: lastPriceask.toString(),
+        price: (lastPrice - 0.2).toFixed(2).toString(),
         quantity: quantitys,
         side: "Ask",
         symbol: "SOL_USDC",
