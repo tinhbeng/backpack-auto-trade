@@ -3,8 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const backpack_client_1 = require("./backpack_client");
 
 /// EDIT HERE ///
-const API_KEY = "b0KPCPT0i0z63NB2zB137ESZDA7GPKfNq73y5hj8nGc=";
-const API_SECRET = "ykBr9pQNLiM8018c6C80vkPmuO+uGuxBzB4BsjljzSE=";
+// const API_KEY = "b0KPCPT0i0z63NB2zB137ESZDA7GPKfNq73y5hj8nGc=";
+// const API_SECRET = "ykBr9pQNLiM8018c6C80vkPmuO+uGuxBzB4BsjljzSE=";
+const API_KEY = "woaUjfiYD1nQW+ZAPtgaeCF5jovMX2eD80XKAZRfQcM=";
+const API_SECRET = "IRUDZqWQk/k8xiZPx6bH3fMJJdwK7X3M7g8gzEraMbc=";
 /////////////
 
 function delay(ms) {
@@ -81,24 +83,24 @@ const init = async (client) => {
 }
 
 const buy = async (client) => {
-    let getListOrder = await client.GetOpenOrders({ symbol: "SOL_USDC" });
+    let getListOrder = await client.GetOpenOrders({ symbol: "BONK_USDC" });
     console.log("getListOrder.length", getListOrder.length)
     if (getListOrder.length > 0) {
-        let CancelOpenOrders = await client.CancelOpenOrders({ symbol: "SOL_USDC" });
+        let CancelOpenOrders = await client.CancelOpenOrders({ symbol: "BONK_USDC" });
         console.log(getCurrentTimeTrade(), "All pending orders canceled");
     }
     let userbalance = await client.Balance();
-    console.log(getCurrentTimeTrade(), `My Account Infos: ${userbalance.SOL.available} $SOL | ${userbalance.USDC.available} $USDC`, );
-    let { lastPrice } = await client.Ticker({ symbol: "SOL_USDC" });
+    console.log(getCurrentTimeTrade(), `My Account Infos: ${userbalance.BONK.available} $BONK | ${userbalance.USDC.available} $USDC`, );
+    let { lastPrice } = await client.Ticker({ symbol: "BONK_USDC" });
     console.log(getCurrentTimeTrade(), "Price of sol_usdc:", lastPrice);
-    let quantitys = ((userbalance.USDC.available - 2) / lastPrice).toFixed(2).toString();
-    console.log(getCurrentTimeTrade(), `Buy ${(userbalance.USDC.available - 2).toFixed(2).toString()} $USDC to ${quantitys} $SOL`);
+    let quantitys = ((userbalance.USDC.available - 2) / lastPrice).toFixed(0).toString();
+    console.log(getCurrentTimeTrade(), `Buy ${(userbalance.USDC.available - 2).toFixed(2).toString()} $USDC to ${quantitys} $BONK`);
     let orderResultBid = await client.ExecuteOrder({
         orderType: "Limit",
-        price: (lastPrice + 0.2).toFixed(2).toString(),
+        price: (lastPrice + 0.00000003).toString(),
         quantity: quantitys,
         side: "Bid",
-        symbol: "SOL_USDC",
+        symbol: "BONK_USDC",
         timeInForce: "IOC"
     })
     if (orderResultBid?.status == "Filled" && orderResultBid?.side == "Bid") {
@@ -116,25 +118,25 @@ const buy = async (client) => {
 
 
 const sell = async (client) => {
-    let GetOpenOrders = await client.GetOpenOrders({ symbol: "SOL_USDC" });
+    let GetOpenOrders = await client.GetOpenOrders({ symbol: "BONK_USDC" });
     if (GetOpenOrders.length > 0) {
-        let CancelOpenOrders = await client.CancelOpenOrders({ symbol: "SOL_USDC" });
+        let CancelOpenOrders = await client.CancelOpenOrders({ symbol: "BONK_USDC" });
         console.log(getCurrentTimeTrade(), "All pending orders canceled");
     }
 
     let userbalance2 = await client.Balance();
-    console.log(getCurrentTimeTrade(), `My Account Infos: ${userbalance2.SOL.available} $SOL | ${userbalance2.USDC.available} $USDC`, );
+    console.log(getCurrentTimeTrade(), `My Account Infos: ${userbalance2.BONK.available} $BONK | ${userbalance2.USDC.available} $USDC`, );
     
-    let { lastPrice } = await client.Ticker({ symbol: "SOL_USDC" });
+    let { lastPrice } = await client.Ticker({ symbol: "BONK_USDC" });
     console.log(getCurrentTimeTrade(), "Price sol_usdc:", lastPrice);
-    let quantitys = (userbalance2.SOL.available - 0.02).toFixed(2).toString();
-    console.log(getCurrentTimeTrade(), `Sell ${quantitys} $SOL to ${(lastPrice * quantitys).toFixed(2)} $USDC`);
+    let quantitys = (userbalance2.BONK.available - 10).toFixed(0).toString();
+    console.log(getCurrentTimeTrade(), `Sell ${quantitys} $BONK to ${(lastPrice * quantitys).toFixed(2)} $USDC`);
     let orderResultAsk = await client.ExecuteOrder({
         orderType: "Limit",
-        price: (lastPrice - 0.2).toFixed(2).toString(),
+        price: (lastPrice - 0.00000003).toString(),
         quantity: quantitys,
         side: "Ask",
-        symbol: "SOL_USDC",
+        symbol: "BONK_USDC",
         timeInForce: "IOC"
     })
     if (orderResultAsk?.status == "Filled" && orderResultAsk?.side == "Ask") {
