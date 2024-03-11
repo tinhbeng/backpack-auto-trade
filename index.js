@@ -81,24 +81,24 @@ const init = async (client) => {
 }
 
 const buy = async (client) => {
-    let getListOrder = await client.GetOpenOrders({ symbol: "BONK_USDC" });
+    let getListOrder = await client.GetOpenOrders({ symbol: "HNT_USDC" });
     console.log("getListOrder.length", getListOrder.length)
     if (getListOrder.length > 0) {
-        let CancelOpenOrders = await client.CancelOpenOrders({ symbol: "BONK_USDC" });
+        let CancelOpenOrders = await client.CancelOpenOrders({ symbol: "HNT_USDC" });
         console.log(getCurrentTimeTrade(), "All pending orders canceled");
     }
     let userbalance = await client.Balance();
-    console.log(getCurrentTimeTrade(), `My Account Infos: ${userbalance.BONK.available} $BONK | ${userbalance.USDC.available} $USDC`, );
-    let { lastPrice } = await client.Ticker({ symbol: "BONK_USDC" });
+    console.log(getCurrentTimeTrade(), `My Account Infos: ${userbalance.HNT.available} $HNT | ${userbalance.USDC.available} $USDC`, );
+    let { lastPrice } = await client.Ticker({ symbol: "HNT_USDC" });
     console.log(getCurrentTimeTrade(), "Price of sol_usdc:", lastPrice);
     let quantitys = ((userbalance.USDC.available - 0.5) / lastPrice).toFixed(0).toString();
-    console.log(getCurrentTimeTrade(), `Buy ${(userbalance.USDC.available - 0.5).toFixed(2).toString()} $USDC to ${quantitys} $BONK`);
+    console.log(getCurrentTimeTrade(), `Buy ${(userbalance.USDC.available - 0.5).toFixed(2).toString()} $USDC to ${quantitys} $HNT`);
     let orderResultBid = await client.ExecuteOrder({
         orderType: "Limit",
-        price: (lastPrice + 0.00000002).toFixed(8).toString(),
+        price: (lastPrice + 0.002).toFixed(3).toString(),
         quantity: quantitys,
         side: "Bid",
-        symbol: "BONK_USDC",
+        symbol: "HNT_USDC",
         timeInForce: "IOC"
     })
     if (orderResultBid?.status == "Filled" && orderResultBid?.side == "Bid") {
@@ -116,25 +116,25 @@ const buy = async (client) => {
 
 
 const sell = async (client) => {
-    let GetOpenOrders = await client.GetOpenOrders({ symbol: "BONK_USDC" });
+    let GetOpenOrders = await client.GetOpenOrders({ symbol: "HNT_USDC" });
     if (GetOpenOrders.length > 0) {
-        let CancelOpenOrders = await client.CancelOpenOrders({ symbol: "BONK_USDC" });
+        let CancelOpenOrders = await client.CancelOpenOrders({ symbol: "HNT_USDC" });
         console.log(getCurrentTimeTrade(), "All pending orders canceled");
     }
 
     let userbalance2 = await client.Balance();
-    console.log(getCurrentTimeTrade(), `My Account Infos: ${userbalance2.BONK.available} $BONK | ${userbalance2.USDC.available} $USDC`, );
+    console.log(getCurrentTimeTrade(), `My Account Infos: ${userbalance2.HNT.available} $HNT | ${userbalance2.USDC.available} $USDC`, );
     
-    let { lastPrice } = await client.Ticker({ symbol: "BONK_USDC" });
+    let { lastPrice } = await client.Ticker({ symbol: "HNT_USDC" });
     console.log(getCurrentTimeTrade(), "Price sol_usdc:", lastPrice);
-    let quantitys = (userbalance2.BONK.available - 2).toFixed(0).toString();
-    console.log(getCurrentTimeTrade(), `Sell ${quantitys} $BONK to ${(lastPrice * quantitys).toFixed(2)} $USDC`);
+    let quantitys = (userbalance2.HNT.available - 0.05).toFixed(0).toString();
+    console.log(getCurrentTimeTrade(), `Sell ${quantitys} $HNT to ${(lastPrice * quantitys).toFixed(2)} $USDC`);
     let orderResultAsk = await client.ExecuteOrder({
         orderType: "Limit",
-        price: (lastPrice - 0.00000002).toFixed(8).toString(),
+        price: (lastPrice - 0.002).toFixed(3).toString(),
         quantity: quantitys,
         side: "Ask",
-        symbol: "BONK_USDC",
+        symbol: "HNT_USDC",
         timeInForce: "IOC"
     })
     if (orderResultAsk?.status == "Filled" && orderResultAsk?.side == "Ask") {
